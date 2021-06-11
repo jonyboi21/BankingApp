@@ -1,12 +1,13 @@
 package banking.fullstack.app.customer;
 
 
-import model.Address;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,9 +26,12 @@ public class Customer implements UserDetails {
     private String name;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private CustomerRole customerRole;
     private Set<Address> addressSet;
     private Boolean locked = false;
     private Boolean enabled = false;
+
 
     public Customer() {
     }
@@ -79,8 +83,11 @@ public class Customer implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+         SimpleGrantedAuthority authority =
+                new SimpleGrantedAuthority(customerRole.name());
+        return Collections.singletonList(authority);
+    };
+
 
     @Override
     public String getPassword() {
@@ -89,7 +96,7 @@ public class Customer implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     @Override
@@ -99,17 +106,17 @@ public class Customer implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
     }
 
 
