@@ -1,4 +1,4 @@
-package customer;
+package banking.fullstack.app.customer;
 
 
 import model.Address;

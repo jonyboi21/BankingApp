@@ -1,4 +1,4 @@
-package customer;
+package banking.fullstack.app.customer;
 
 //import com.example.bankingapi.exceptionhandling.CodeMessage;
 //import com.example.bankingapi.exceptionhandling.CodeMessageData;
