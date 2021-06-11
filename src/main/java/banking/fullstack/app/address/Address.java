@@ -1,4 +1,4 @@
-package address;
+package banking.fullstack.app.address;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
