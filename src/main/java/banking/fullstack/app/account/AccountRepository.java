@@ -3,8 +3,10 @@ package banking.fullstack.app.account;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AccountRepository extends CrudRepository<Account, Long> {
 
-    Iterable<Account> findAllByCustomerId(Long customerId);
+    List<Account> findAllByCustomerId(Long customerId);
 }
