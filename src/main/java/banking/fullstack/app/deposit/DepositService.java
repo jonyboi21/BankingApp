@@ -1,8 +1,8 @@
 package banking.fullstack.app.deposit;
 
-import com.example.bankingapi.account.Account;
-import com.example.bankingapi.account.AccountRepository;
-import com.example.bankingapi.account.AccountService;
+import banking.fullstack.app.account.Account;
+import banking.fullstack.app.account.AccountRepository;
+import banking.fullstack.app.account.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
