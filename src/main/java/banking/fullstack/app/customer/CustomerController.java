@@ -21,6 +21,11 @@ public class CustomerController {
     customerService.createCustomer(customer);
 
     }
+
+    @GetMapping("/customer/{id}")
+    public Customer getCustomerByEmail(@PathVariable Long id){
+        return customerService.getCustomerById(id);
+    }
     @GetMapping("/customer/")
     public List<Customer> getAllCustomers(){
         return customerService.getAllCustomers();

@@ -16,7 +16,7 @@ public class DepositService {
 
 
     @Autowired
-    DepositRepository depositRepository;
+    DepositRepo depositRepo;
     @Autowired
     AccountService accountService;
     @Autowired

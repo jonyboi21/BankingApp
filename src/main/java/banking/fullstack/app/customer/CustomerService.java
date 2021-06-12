@@ -60,4 +60,7 @@ public class CustomerService implements UserDetailsService {
                 .orElseThrow();
     }
 
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findById(id).get();
+    }
 }
