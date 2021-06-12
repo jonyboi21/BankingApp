@@ -2,125 +2,80 @@ package banking.fullstack.app.customer;
 
 
 import banking.fullstack.app.address.Address;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
 @Entity
-public class Customer implements UserDetails {
+public class Customer {
 
 
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotEmpty
     private String name;
+
+    @NotEmpty
     private String email;
+
+    @NotEmpty
     private String password;
-    @Enumerated(EnumType.STRING)
-    private CustomerRole customerRole;
-    @NotNull
+    @NotEmpty
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Address> addressSet;
-    private Boolean locked = false;
-    private Boolean enabled = false;
+
 
 
     public Customer() {
     }
 
-
-    public Long getCustomerId() {
+    public Long getId() {
         return id;
     }
 
-    public void setCustomerId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getCustomerName() {
+    public String getName() {
         return name;
     }
 
-    public void setCustomerName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getCustomerEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setCustomerEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setCustomerPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public Boolean getCustomerLocked() {
-        return locked;
-    }
-
-    public void setCustomerLocked(Boolean locked) {
-        this.locked = locked;
-    }
-
-    public Boolean getCustomerEnabled() {
-        return enabled;
-    }
-
-    public void setCustomerEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-         SimpleGrantedAuthority authority =
-                new SimpleGrantedAuthority(customerRole.name());
-        return Collections.singletonList(authority);
-    };
-
-
-    @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
-    @Override
-    public String getUsername() {
-        return email;
+    public Set<Address> getAddressSet() {
+        return addressSet;
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
+    public void setAddressSet(Set<Address> addressSet) {
+        this.addressSet = addressSet;
     }
 
 
@@ -131,8 +86,7 @@ public class Customer implements UserDetails {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", locked=" + locked +
-                ", enabled=" + enabled +
+                ", addressSet=" + addressSet +
                 '}';
     }
 }

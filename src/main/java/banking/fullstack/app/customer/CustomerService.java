@@ -4,9 +4,6 @@ package banking.fullstack.app.customer;
 import banking.fullstack.app.customer.Customer;
 import banking.fullstack.app.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,19 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomerService implements UserDetailsService {
+public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
-    private final static String USER_NOT_FOUND_MSG =
-            "user with email %s not found";
+
 
     public void createCustomer(Customer customer){
         Boolean userExists = customerRepository
-                .findByEmail(customer.getCustomerEmail())
+                .findByEmail(customer.getEmail())
                 .isPresent();
         if(userExists){
             throw new IllegalStateException("email already taken");
-        }
+        }else
         customerRepository.save(customer);
     }
     public List<Customer> getAllCustomers(){
@@ -43,7 +39,7 @@ public class CustomerService implements UserDetailsService {
 
     public void updateCustomer(Customer customer, Long id){
        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-        customer.setCustomerId(id);
+        customer.setId(id);
         customerRepository.save(customer);
 
     }
@@ -53,12 +49,12 @@ public class CustomerService implements UserDetailsService {
     }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        return customerRepository.findByEmail(email)
-                .orElseThrow();
-    }
+//    @Override
+//    public UserDetails loadUserByUsername(String email)
+//            throws UsernameNotFoundException {
+//        return customerRepository.findByEmail(email)
+//                .orElseThrow();
+//    }
 
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id).get();

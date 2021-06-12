@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api/v1")
+//@RequestMapping(path = "/api/v1")
 public class AccountController {
 
     @Autowired
