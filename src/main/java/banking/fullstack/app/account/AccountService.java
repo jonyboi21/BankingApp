@@ -5,6 +5,7 @@ import banking.fullstack.app.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +23,14 @@ public class AccountService {
     }
 
     public List<Account> getAllAccounts(){
-        return (List<Account>) accountRepository.findAll();
+        List<Account> listOfAccounts = new ArrayList<>();
+        accountRepository
+                .findAll().forEach(listOfAccounts::add);
+        return listOfAccounts;
     }
 
-    public Optional<Account> getAccountByAccountId(Long accountId){
-        return accountRepository.findById(accountId);
+    public Account getAccountByAccountId(Long accountId){
+        return accountRepository.findById(accountId).get();
     }
 
     public List<Account> getAllAccountsByCustomer(Long customerId){
@@ -40,9 +44,10 @@ public class AccountService {
     }
 
     public boolean accountCheck(Long accountId){
-
-        Account account = getAccountByAccountId(accountId).orElse(null);
-        return account != null;
+        if (getAccountByAccountId(accountId) == null){
+            return false;
+        }
+            return true;
     }
 
     public void updateAccount(Account account, Long accountId){

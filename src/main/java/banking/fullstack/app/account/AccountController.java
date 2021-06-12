@@ -25,7 +25,7 @@ public class AccountController {
     }
 
     @GetMapping("/account/{accountId}")
-    public Optional<Account> getAccountByAccountId(@PathVariable Long accountId){
+    public Account getAccountByAccountId(@PathVariable Long accountId){
     return accountService.getAccountByAccountId(accountId);
     }
 
