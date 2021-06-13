@@ -1,23 +1,22 @@
 package banking.fullstack.app.bills;
 
-import banking.fullstack.app.account.Account;
 import banking.fullstack.app.account.AccountRepository;
 import banking.fullstack.app.account.AccountService;
-import banking.fullstack.app.customer.Customer;
 import banking.fullstack.app.customer.CustomerRepository;
 import banking.fullstack.app.customer.CustomerService;
-import org.apache.velocity.exception.ResourceNotFoundException;
+import banking.fullstack.app.exceptionhandling.CodeData;
+import banking.fullstack.app.exceptionhandling.CodeMessage;
+import banking.fullstack.app.exceptionhandling.CodeMessageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
+import java.util.List;
 
 @RestController
+@RequestMapping(path = "/hanover/api/v2")
 public class BillController {
     @Autowired
     private BillService billService;
@@ -38,95 +37,98 @@ public class BillController {
     private AccountRepository accountRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(BillController.class);
-//
-//    public void verifyAccount(Long accountId) throws ResourceNotFoundException {
-//        Optional<Account> account = accountService.getAccountById(accountId);
-//        if (!account.isPresent()) {
-//            throw new ResourceNotFoundException("error fetching bills");
-//        }
-//    }
-//
-//    public void verifyCreate(Long accountId) throws ResourceNotFoundException {
-//        Optional<Account> account = accountService.getAccountById(accountId);
-//        if (!(account.isPresent())) {
-//            logger.info("ERROR CREATING BILL");
-//            throw new ResourceNotFoundException("Error creating bill: Account not found");
-//        }
-//    }
-//
-//    public void verifyBill(Long billId) throws ResourceNotFoundException {
-//        Optional<Bill> bill1 = billRepo.findById(billId);
-//        if (bill1.isEmpty()) {
-//            throw new ResourceNotFoundException("error fetching bills with id: " + billId);
-//        }
-//    }
-//
-//    public void verifyCustomer(Long customerId) throws ResourceNotFoundException {
-//        Customer customer = customerService.getCustomerById(customerId);
-////        if (!customer.isPrese()) {
-//            throw new ResourceNotFoundException("error fetching bills");
-//        }
-//
-//
-//    public void verifyUpdate(Long billId) throws ResourceNotFoundException {
-//        Optional<Bill> bill1 = billRepo.findById(billId);
-//        if (bill1.isEmpty()) {
-//            logger.info("ERROR UPDATING BILL WITH ID: " + billId);
-//            throw new ResourceNotFoundException("Bill ID: " + billId + " does not exist");
-//        }
-//    }
-//
-//    @RequestMapping(value = "/accounts/{accountId}/bills", method = RequestMethod.GET)
-//    public ResponseEntity<?> getAllBillsByAccountId(@PathVariable Long accountId) {
-//        verifyAccount(accountId);
-//        Iterable<Bill> a = billService.getAllByAccountId(accountId);
-//        SuccessfulResponseIterable successfulResponseIterable = new SuccessfulResponseIterable(HttpStatus.OK.value(), null, a);
-//        return new ResponseEntity<>(successfulResponseIterable, HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(value = "/bills/{billId}", method = RequestMethod.GET)
-//    public ResponseEntity<?> getBillById(@PathVariable Long billId) {
-//        verifyBill(billId);
-//        SuccessfulResponseObject successfulResponseObject = new SuccessfulResponseObject(HttpStatus.OK.value(), null, billService.getById(billId));
 
-//        return new ResponseEntity<>(successfulResponseObject, HttpStatus.OK);
-//    }
+    @GetMapping("/bills")
+    public ResponseEntity<?> getAllBills() {
 
-//    @RequestMapping(value = "/customers/{customerId}/bills", method = RequestMethod.GET)
-//    public ResponseEntity<?> getAllBillsByCustomerId(@PathVariable Long customerId) {
-//        verifyCustomer(customerId);
-//        Iterable<Bill> c = billService.getAllByCustomerId(customerId);
-//        SuccessfulResponseIterable successfulResponseIterable = new SuccessfulResponseIterable(HttpStatus.OK.value(), null, c);
-//        return new ResponseEntity<>(successfulResponseIterable, HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(value = "/bills/{billId}", method = RequestMethod.PUT)
-//    public ResponseEntity<?> updateBill(@RequestBody Bill bill, @PathVariable Long billId) {
-//        verifyUpdate(billId);
-//
-//        billService.updateBill(bill, billId);
-//        SuccessfulResponseObject successfulResponseObject = new SuccessfulResponseObject(202, "Accepted bill modification", null);
-//        return new ResponseEntity<>(successfulResponseObject, HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(value = "/accounts/{accountId}/bills", method = RequestMethod.POST)
-//    public ResponseEntity<?> createBill( @PathVariable Long accountId, @Validated @RequestBody Bill bill) {
-//        verifyCreate(accountId);
-//        billService.createBill(bill);
-//        SuccessfulResponseObject successfulResponseObject = new SuccessfulResponseObject(HttpStatus.CREATED.value(), "Created bill and added it to the account", bill);
-//        return new ResponseEntity<>(successfulResponseObject, HttpStatus.CREATED);
-//    }
+        Iterable<Bill> bills = billService.getAllBills();
+        if (bills.iterator().hasNext()) {
+            CodeMessageData response = new CodeMessageData(200, "Success", bills);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
 
-//    @RequestMapping(value = "/bills/{billId}", method = RequestMethod.DELETE)
-//    public ResponseEntity<?> deleteBill(@PathVariable Long billId) {
-//        Optional<Bill> bill = billService.getById(billId);
-//        if (bill.isEmpty()) {
-//            logger.info("CANNOT DELETE NON-EXISTING BILL");
-//            throw new ResourceNotFoundException("This id: " + billId + " does not exist in bills");
-//        } else {
-//            logger.info("BILL WITH ID: " + billId + " SUCCESSFULLY UPDATED");
-//            billService.deleteBill(billId);
-//            SuccessfulResponseOptional successfulResponseOptional = new SuccessfulResponseOptional(204, null, null);
-//            return new ResponseEntity<>(successfulResponseOptional, HttpStatus.OK);
-//        }
+        CodeMessage exception = new CodeMessage(404,"Error: no bills found");
+        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/accounts/{accountId}/bills")
+    public ResponseEntity<?> getAllBillsByAccount(@PathVariable Long accountId) {
+
+        List<Bill> bills = billService.getAllBillsByAccountId(accountId);
+        if(bills.isEmpty()){
+            CodeMessage exception = new CodeMessage(404,"Error: account with id " + accountId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        }
+
+        CodeData response = new CodeData(200, bills);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/bills/{billId}")
+    public ResponseEntity<?> getBillById(@PathVariable Long billId){
+
+        Bill bill = billService.getBillByBillId(billId);
+        if(bill == null){
+            CodeMessage exception = new CodeMessage(404,"Error: bill with id " + billId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        }
+
+        CodeData response = new CodeData(200, bill);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/customers/{customerId}/bills")
+    public ResponseEntity<?> getAllBillsByCustomerId(@PathVariable Long customerId){
+
+        List<Bill> bills = billService.getAllBillsByCustomerId(customerId);
+        if(bills.isEmpty()){
+            CodeMessage exception = new CodeMessage(404,"Error: bill with customer id " + customerId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        }
+
+        CodeData response = new CodeData(200, bills);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/accounts/{accountId}/bills")
+    public ResponseEntity<?> createBill(@RequestBody Bill bill, @PathVariable Long accountId) {
+        try {
+            if (!billService.accountCheck(accountId)) {
+                CodeMessage exception = new CodeMessage(404,"Error: account with id " + accountId + " does not exist");
+                return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+            } else {
+                Bill b1 = billService.createBill(bill);
+                CodeMessageData response = new CodeMessageData(201, "Bill created", b1);
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
+            } } catch (Exception e){
+            CodeMessage error = new CodeMessage(404, "Error: could not create bill");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/bills/{billId}")
+    public ResponseEntity<?> updateBill(@RequestBody Bill bill, @PathVariable Long billId){
+
+        if(!billService.billCheck(billId)){
+            CodeMessage exception = new CodeMessage(404,"Error: bill with id " + billId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        }
+
+        billService.updateBill(bill);
+        CodeMessage response = new CodeMessage(200, "Bill updated");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/bills/{billId}")
+    public ResponseEntity<?> deleteBill(@PathVariable Long billId){
+
+        if(!billService.billCheck(billId)){
+            CodeMessage exception = new CodeMessage(404,"Error: bill with id " + billId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        }
+
+        billService.deleteBill(billId);
+        CodeMessage response = new CodeMessage(200,"Bill deleted");
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+}

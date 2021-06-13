@@ -1,14 +1,20 @@
 package banking.fullstack.app.withdrawal;
 
 import banking.fullstack.app.account.AccountRepository;
+import banking.fullstack.app.deposit.Deposit;
+import banking.fullstack.app.exceptionhandling.CodeData;
+import banking.fullstack.app.exceptionhandling.CodeMessage;
+import banking.fullstack.app.exceptionhandling.CodeMessageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping(path = "/hanover/api/v2")
 public class WithdrawalController {
 
     @Autowired
@@ -20,12 +26,24 @@ public class WithdrawalController {
     @Autowired
     AccountRepository accountRepository;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountId}/withdrawals")
+    @GetMapping("/withdrawals")
+    public ResponseEntity<?> getAllDeposits() {
+        List<Withdrawal> withdrawals = withdrawalService.getAllWithdrawals();
+        if(withdrawals.isEmpty()){
+            CodeMessage error = new CodeMessage(404, "Error: no deposits found");
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+
+        CodeMessageData response = new CodeMessageData(200, "Success", withdrawals);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/accounts/{accountId}/withdrawals")
     public ResponseEntity<?> getAllWithdrawalsByAccountId(@PathVariable Long accountId) {
 
        Iterable<Withdrawal> withdrawals =  withdrawalService.getAllWithdrawalsByAccountId(accountId);
         if(withdrawalRepository.getWithdrawalByAccountId(accountId).isEmpty()){
-            CodeMessage exception = new CodeMessage("Withdrawal(s) not found");
+            CodeMessage exception = new CodeMessage(404,"Error: account with " + accountId + " does not exist");
         return new ResponseEntity<>(exception,HttpStatus.NOT_FOUND);
     }
         CodeData response = new CodeData(200, withdrawals);
@@ -33,62 +51,63 @@ public class WithdrawalController {
     }
 
 
-    @RequestMapping(value = "/withdrawals/{withdrawalId}", method = RequestMethod.GET)
+    @GetMapping("/withdrawals/{withdrawalId}")
     public ResponseEntity<?> getWithdrawalById(@PathVariable Long withdrawalId){
 
         Optional<Withdrawal> withdrawal =  withdrawalService.getWithdrawalByWithdrawalId(withdrawalId);
         if(withdrawal.isEmpty()){
-            CodeMessage exception = new CodeMessage("error fetching withdrawal with withdrawal id " + withdrawalId);
+            CodeMessage exception = new CodeMessage(404,"Error: deposit with id " + withdrawalId + " does not exist");
             return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
         }
         CodeData response = new CodeData(200, withdrawal);
         return new ResponseEntity<> (response, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/accounts/{accountId}/withdrawals")
+    @PostMapping("/accounts/{accountId}/withdrawals")
     public ResponseEntity<?> createWithdrawal(@PathVariable Long accountId, @RequestBody Withdrawal withdrawal) {
 
         try {
             if (!withdrawalService.accountCheck(accountId)) {
-                CodeMessage exception = new CodeMessage(404, "Error creating withdrawal: Account not found");
+                CodeMessage exception = new CodeMessage(404, "Error: account with id " + accountId + " does not exist");
                 return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
             } else if (withdrawal.getAmount() >= accountRepository.findById(accountId).get().getBalance()) {
-                CodeMessage exception = new CodeMessage(404, "Error creating withdrawal: Over withdrawal");
+                CodeMessage exception = new CodeMessage(400, "Error: over withdrawal");
                 return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
             } else if (withdrawal.getAmount() <= 0) {
-                CodeMessage exception = new CodeMessage(404, "Error creating withdrawal: Withdrawal amount must be greater than zero");
+                CodeMessage exception = new CodeMessage(400, "Error: withdrawal amount must be greater than zero");
                 return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
             } else {
                 Withdrawal w1 = withdrawalService.createWithdrawal(withdrawal, accountId);
-                CodeMessageData response = new CodeMessageData(201, "Created withdrawal and deducted it from the account", w1);
+                CodeMessageData response = new CodeMessageData(201, "Withdrawal Created", w1);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             } } catch (Exception e){
-            CodeMessage error = new CodeMessage(404, "Error creating withdrawal");
+            CodeMessage error = new CodeMessage(404, "Error: could not create withdrawal");
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/withdrawals/{withdrawalId}")
+    @PutMapping("/withdrawals/{withdrawalId}")
     public ResponseEntity<?> updateWithdrawal(@PathVariable Long withdrawalId, @RequestBody Withdrawal withdrawal) {
         if (!withdrawalService.withdrawalCheck(withdrawalId)) {
-            CodeMessage exception = new CodeMessage("Withdrawal ID does not exist");
+            CodeMessage exception = new CodeMessage(404,"Error: withdrawal with id " + withdrawalId + " does not exist");
             return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
         }
 
         withdrawalService.updateWithdrawal(withdrawal, withdrawalId);
-        CodeMessage response = new CodeMessage(202, "Accepted withdrawal modification");
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        CodeMessage response = new CodeMessage(200, "Withdrawal updated");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/withdrawals/{withdrawalId}")
+    @DeleteMapping("/withdrawals/{withdrawalId}")
     public ResponseEntity<?> deleteWithdrawal(@PathVariable Long withdrawalId){
 
     if(!withdrawalService.withdrawalCheck(withdrawalId)){
-        CodeMessage exception = new CodeMessage("This id does not exist in withdrawals");
+        CodeMessage exception = new CodeMessage(404,"Error: withdrawal with id " + withdrawalId + " does not exist");
         return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
 
         withdrawalService.deleteWithdrawal(withdrawalId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        CodeMessage response = new CodeMessage(200, "Withdrawal deleted");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

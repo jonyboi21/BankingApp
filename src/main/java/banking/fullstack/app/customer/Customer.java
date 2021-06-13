@@ -1,6 +1,5 @@
 package banking.fullstack.app.customer;
 
-
 import banking.fullstack.app.address.Address;
 import javax.persistence.*;
 import java.util.Set;
@@ -10,30 +9,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 
 @Entity
 public class Customer {
 
-
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotEmpty
     private String name;
-
     @NotEmpty
     private String email;
-
     @NotEmpty
     private String password;
-    @NotEmpty
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<Address> addressSet;
-
-
+    private Set<Address> address;
 
     public Customer() {
     }
@@ -70,23 +60,11 @@ public class Customer {
         return password;
     }
 
-    public Set<Address> getAddressSet() {
-        return addressSet;
+    public Set<Address> getAddress() {
+        return address;
     }
 
-    public void setAddressSet(Set<Address> addressSet) {
-        this.addressSet = addressSet;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", addressSet=" + addressSet +
-                '}';
+    public void setAddress(Set<Address> address) {
+        this.address = address;
     }
 }

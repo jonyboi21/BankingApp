@@ -2,15 +2,16 @@ package banking.fullstack.app.account;
 
 import banking.fullstack.app.customer.Customer;
 import banking.fullstack.app.customer.CustomerRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AccountService {
+
+    Logger accountLog = LoggerFactory.getLogger(AccountController.class);
 
     @Autowired
     AccountRepository accountRepository;
@@ -18,44 +19,51 @@ public class AccountService {
     @Autowired
     CustomerRepository customerRepository;
 
-    public Account createAccount(Account account){
-        return accountRepository.save(account);
+    public Iterable<Account> getAllAccounts() {
+
+        accountLog.info("===== RETRIEVING ALL ACCOUNTS =====");
+        return accountRepository.findAll();
     }
 
-    public List<Account> getAllAccounts(){
-        List<Account> listOfAccounts = new ArrayList<>();
-        accountRepository
-                .findAll().forEach(listOfAccounts::add);
-        return listOfAccounts;
+    public Optional<Account> getAccountByAccountId(Long accountId) {
+
+        accountLog.info("===== RETRIEVING ALL ACCOUNTS BY ACCOUNT ID =====");
+        return accountRepository.findById(accountId);
     }
 
-    public Account getAccountByAccountId(Long accountId){
-        return accountRepository.findById(accountId).get();
-    }
+    public Iterable<Account> getAllAccountsByCustomer(Long customerId) {
 
-    public List<Account> getAllAccountsByCustomer(Long customerId){
+        accountLog.info("===== RETRIEVING ALL ACCOUNTS BY CUSTOMER ID =====");
         return accountRepository.findAllByCustomerId(customerId);
     }
 
-    public boolean customerCheck(Long accountId){
+    public boolean customerCheck(Long accountId) {
 
         Customer customer = customerRepository.findById(accountId).orElse(null);
         return customer != null;
     }
 
-    public boolean accountCheck(Long accountId){
-        if (getAccountByAccountId(accountId) == null){
-            return false;
-        }
-            return true;
+    public boolean accountCheck(Long accountId) {
+
+        Account account = getAccountByAccountId(accountId).orElse(null);
+        return account != null;
     }
 
-    public void updateAccount(Account account, Long accountId){
-        account.setId(accountId);
+    public Account createAccount(Account account) {
+
+        accountLog.info("===== CREATING ACCOUNT =====");
+        return accountRepository.save(account);
+    }
+
+    public void updateAccount(Account account) {
+
+        accountLog.info("===== UPDATING ACCOUNT =====");
         accountRepository.save(account);
     }
 
-    public void deleteAccount(Long accountId){
+    public void deleteAccount(Long accountId) {
+
+        accountLog.info("===== DELETING ACCOUNT =====");
         accountRepository.deleteById(accountId);
     }
 }

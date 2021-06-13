@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface WithdrawalRepository extends CrudRepository<Withdrawal, Long> {
 
-    @Query(value = "SELECT * FROM Withdrawal WHERE payer_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM Withdrawal WHERE payerId = ?1", nativeQuery = true)
     List<Withdrawal> getWithdrawalByAccountId(Long accountId);
 }

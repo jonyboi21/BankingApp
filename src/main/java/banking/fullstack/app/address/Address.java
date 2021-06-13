@@ -22,9 +22,6 @@ public class Address {
     @Column(nullable = false)
     public String zip;
 
-    public Address() {
-    }
-
     public Long getId() {
         return id;
     }
@@ -71,17 +68,5 @@ public class Address {
 
     public void setZip(String zip) {
         this.zip = zip;
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", street_number='" + streetNumber + '\'' +
-                ", street_name='" + streetName + '\'' +
-                ", city='" + city + '\'' +
-                ", state='" + state + '\'' +
-                ", zip='" + zip + '\'' +
-                '}';
     }
 }

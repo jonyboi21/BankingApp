@@ -1,10 +1,7 @@
 package banking.fullstack.app.bills;
 
-
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,53 +9,31 @@ import javax.persistence.Id;
 
 @Entity
 public class Bill {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-//    @NotNull
-//    private Status status;
-
     @NotNull
     private String payee;
-
     @NotNull
     private String nickname;
-
     @NotNull
     private String creationDate;
-
     @NotNull
     private String paymentDate;
-
     @NotNull
     private Integer recurringDate;
-
     @NotNull
     private String upcomingPaymentDate;
-
     @NotNull
     @Min(value = 0)
-
     private Double paymentAmount;
-
     @NotNull
     private Long accountId;
-
     @NotNull
     private Long customerId;
 
-    public Bill(Long id, String payee, String nickname, String creationDate, String paymentDate, Integer recurringDate, String upcomingPaymentDate, Double paymentAmount, Long accountId, Long customerId) {
-        this.id = id;
-        this.payee = payee;
-        this.nickname = nickname;
-        this.creationDate = creationDate;
-        this.paymentDate = paymentDate;
-        this.recurringDate = recurringDate;
-        this.upcomingPaymentDate = upcomingPaymentDate;
-        this.paymentAmount = paymentAmount;
-        this.accountId = accountId;
-        this.customerId = customerId;
+    public Bill(){
     }
 
     public Long getId() {
