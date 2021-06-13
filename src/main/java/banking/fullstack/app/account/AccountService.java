@@ -1,5 +1,6 @@
 package banking.fullstack.app.account;
 
+import banking.fullstack.app.customer.Customer;
 import banking.fullstack.app.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,17 +32,17 @@ public class AccountService {
         return accountRepository.findAllByCustomerId(customerId);
     }
 
-//    public boolean customerCheck(Long accountId){
-//
-//        Customer customer = customerRepository.findById(accountId).orElse(null);
-//        return customer != null;
-//    }
-//
-//    public boolean accountCheck(Long accountId){
-//
-//        Account account = getAccountByAccountId(accountId).orElse(null);
-//        return account != null;
-//    }
+    public boolean customerCheck(Long accountId){
+
+        Customer customer = customerRepository.findById(accountId).orElse(null);
+        return customer != null;
+    }
+
+    public boolean accountCheck(Long accountId){
+
+        Account account = getAccountByAccountId(accountId).orElse(null);
+        return account != null;
+    }
 
     public void updateAccount(Account account, Long accountId){
         accountRepository.save(account);

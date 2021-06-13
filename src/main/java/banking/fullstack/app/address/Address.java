@@ -12,15 +12,18 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
     @Column(nullable = false)
-    public String street_number;
+    public String streetNumber;
     @Column(nullable = false)
-    public String street_name;
+    public String streetName;
     @Column(nullable = false)
     public String city;
     @Column(nullable = false)
     public String state;
     @Column(nullable = false)
     public String zip;
+
+    public Address() {
+    }
 
     public Long getId() {
         return id;
@@ -30,20 +33,20 @@ public class Address {
         this.id = id;
     }
 
-    public String getStreet_number() {
-        return street_number;
+    public String getStreetNumber() {
+        return streetNumber;
     }
 
-    public void setStreet_number(String street_number) {
-        this.street_number = street_number;
+    public void setStreetNumber(String street_number) {
+        this.streetNumber = street_number;
     }
 
-    public String getStreet_name() {
-        return street_name;
+    public String getStreetName() {
+        return streetName;
     }
 
-    public void setStreet_name(String street_name) {
-        this.street_name = street_name;
+    public void setStreetName(String street_name) {
+        this.streetName = street_name;
     }
 
     public String getCity() {
@@ -68,5 +71,17 @@ public class Address {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", street_number='" + streetNumber + '\'' +
+                ", street_name='" + streetName + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                '}';
     }
 }
