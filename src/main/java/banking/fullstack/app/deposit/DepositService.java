@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 @Service
 public class DepositService {
@@ -16,29 +19,36 @@ public class DepositService {
 
 
     @Autowired
-    DepositRepo depositRepo;
+    DepositRepository depositRepository;
     @Autowired
     AccountService accountService;
     @Autowired
     AccountRepository accountRepository;
 
+    public List<Deposit> getAllDeposits() {
+
+        depositLog.info("===== RETRIEVING ALL DEPOSITS =====");
+        List<Deposit> listOfDeposits = new ArrayList<>();
+        depositRepository.findAll().forEach(listOfDeposits::add);
+        return listOfDeposits;
+    }
 
     public Iterable<Deposit> getAllDepositsByAccountId(Long accountId){
 
         depositLog.info("===== RETRIEVING ALL DEPOSITS BY ACCOUNT ID =====");
-        return depositRepo.getDepositsByAccountId(accountId);
+        return depositRepository.getDepositsByAccountId(accountId);
     }
 
     public Optional<Deposit> getDepositByAccountId(Long accountId){
 
-        return depositRepo.getDepositByAccountId(accountId);
+        return depositRepository.getDepositByAccountId(accountId);
     }
 
 
     public Optional<Deposit> getDepositByDepositId(Long depositsId){
 
         depositLog.info("===== RETRIEVING DEPOSIT BY DEPOSIT ID =====");
-        return depositRepo.findById(depositsId);
+        return depositRepository.findById(depositsId);
     }
 
     public Deposit createDeposit(Deposit deposit, Long accountId) {
@@ -52,16 +62,16 @@ public class DepositService {
         Double transaction = depositAmount + accountBalance;
 
         account.get().setBalance(transaction);
-        return depositRepo.save(deposit);
+        return depositRepository.save(deposit);
     }
 
     public void updateDeposit(Deposit deposit, Long depositId){
 
         depositLog.info("===== UPDATING DEPOSIT =====");
 
-        Account account = accountService.getAccountByAccountId(deposit.getPayee_id()).orElse(null);
+        Account account = accountService.getAccountByAccountId(deposit.getPayeeId()).orElse(null);
 
-        Double oldDepositAmount = depositRepo.findById(depositId).get().getAmount();
+        Double oldDepositAmount = depositRepository.findById(depositId).get().getAmount();
 
         Double accountBalance = account.getBalance();
 
@@ -73,18 +83,18 @@ public class DepositService {
         Double transaction = oldBalance + depositAmount;
         account.setBalance(transaction);
 
-        depositRepo.save(deposit);
+        depositRepository.save(deposit);
     }
 
     public void deleteDeposit(Long depositsId) {
 
         depositLog.info("===== DELETING DEPOSIT =====");
-        depositRepo.deleteById(depositsId);
+        depositRepository.deleteById(depositsId);
     }
 
     public boolean depositCheck(Long accountId){
 
-        Deposit deposit = depositRepo.findById(accountId).orElse(null);
+        Deposit deposit = depositRepository.findById(accountId).orElse(null);
         return deposit != null;
     }
 

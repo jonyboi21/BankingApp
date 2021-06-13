@@ -3,11 +3,14 @@ package banking.fullstack.app.withdrawal;
 import banking.fullstack.app.account.Account;
 import banking.fullstack.app.account.AccountRepository;
 import banking.fullstack.app.account.AccountService;
+import banking.fullstack.app.deposit.Deposit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +23,14 @@ public class WithdrawalService {
 
     @Autowired
     private AccountService accountService;
+
+    public List<Withdrawal> getAllWithdrawals() {
+
+        withdrawalLog.info("===== RETRIEVING ALL DEPOSITS =====");
+        List<Withdrawal> listOfDeposits = new ArrayList<>();
+        withdrawalRepository.findAll().forEach(listOfDeposits::add);
+        return listOfDeposits;
+    }
 
     public Iterable<Withdrawal> getAllWithdrawalsByAccountId(Long accountId) {
 
@@ -50,7 +61,7 @@ public class WithdrawalService {
 
         withdrawalLog.info("===== UPDATING WITHDRAWAL =====");
 
-        Account account = accountService.getAccountByAccountId(withdrawal.getPayer_id()).orElse(null);
+        Account account = accountService.getAccountByAccountId(withdrawal.getPayerId()).orElse(null);
 
         Double oldWithdrawalAmount = withdrawalRepository.findById(withdrawalId).get().getAmount();
 

@@ -19,6 +19,9 @@ public class Account {
     @Column(nullable = false)
     private Long customerId;
 
+    public Account(){
+    }
+
     public Long getId() {
         return id;
     }

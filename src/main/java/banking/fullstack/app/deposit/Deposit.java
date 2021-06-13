@@ -11,11 +11,11 @@ import javax.persistence.*;
         @Column(nullable = false)
         private String type;
         @Column(nullable = false)
-        private String transaction_date;
+        private String transactionDate;
         @Column(nullable = false)
         private String status;
         @Column(nullable = false)
-        private Long payee_id;
+        private Long payeeId;
         @Column(nullable = false)
         private String medium;
         @Column(nullable = false)
@@ -39,12 +39,12 @@ import javax.persistence.*;
             this.type = type;
         }
 
-        public String getTransaction_date() {
-            return transaction_date;
+        public String getTransactionDate() {
+            return transactionDate;
         }
 
-        public void setTransaction_date(String transaction_date) {
-            this.transaction_date = transaction_date;
+        public void setTransactionDate(String transactionDate) {
+            this.transactionDate = transactionDate;
         }
 
         public String getStatus() {
@@ -55,12 +55,12 @@ import javax.persistence.*;
             this.status = status;
         }
 
-        public Long getPayee_id() {
-            return payee_id;
+        public Long getPayeeId() {
+            return payeeId;
         }
 
-        public void setPayee_id(Long payee_id) {
-            this.payee_id = payee_id;
+        public void setPayeeId(Long payeeId) {
+            this.payeeId = payeeId;
         }
 
         public String getMedium() {
