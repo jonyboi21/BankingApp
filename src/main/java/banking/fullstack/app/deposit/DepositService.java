@@ -41,40 +41,40 @@ public class DepositService {
         return depositRepo.findById(depositsId);
     }
 
-    public Deposit createDeposit(Deposit deposit, Long accountId) {
+//    public Deposit createDeposit(Deposit deposit, Long accountId) {
+//
+//
+//        depositLog.info("===== CREATING DEPOSIT =====");
+//        Optional<Account> account = accountService.getAccountByAccountId(accountId);
+//        Double accountBalance = account.get().getBalance();
+//        Double depositAmount = deposit.getAmount();
+//
+//        Double transaction = depositAmount + accountBalance;
+//
+//        account.get().setBalance(transaction);
+//        return depositRepo.save(deposit);
+//    }
 
-
-        depositLog.info("===== CREATING DEPOSIT =====");
-        Optional<Account> account = accountService.getAccountByAccountId(accountId);
-        Double accountBalance = account.get().getBalance();
-        Double depositAmount = deposit.getAmount();
-
-        Double transaction = depositAmount + accountBalance;
-
-        account.get().setBalance(transaction);
-        return depositRepo.save(deposit);
-    }
-
-    public void updateDeposit(Deposit deposit, Long depositId){
-
-        depositLog.info("===== UPDATING DEPOSIT =====");
-
-        Account account = accountService.getAccountByAccountId(deposit.getPayee_id()).orElse(null);
-
-        Double oldDepositAmount = depositRepo.findById(depositId).get().getAmount();
-
-        Double accountBalance = account.getBalance();
-
-        Double oldBalance = accountBalance - oldDepositAmount;
-        account.setBalance(oldBalance);
-
-        Double depositAmount = deposit.getAmount();
-
-        Double transaction = oldBalance + depositAmount;
-        account.setBalance(transaction);
-
-        depositRepo.save(deposit);
-    }
+//    public void updateDeposit(Deposit deposit, Long depositId){
+//
+//        depositLog.info("===== UPDATING DEPOSIT =====");
+//
+//        Account account = accountService.getAccountByAccountId(deposit.getPayee_id()).orElse(null);
+//
+//        Double oldDepositAmount = depositRepo.findById(depositId).get().getAmount();
+//
+//        Double accountBalance = account.getBalance();
+//
+//        Double oldBalance = accountBalance - oldDepositAmount;
+//        account.setBalance(oldBalance);
+//
+//        Double depositAmount = deposit.getAmount();
+//
+//        Double transaction = oldBalance + depositAmount;
+//        account.setBalance(transaction);
+//
+//        depositRepo.save(deposit);
+//    }
 
     public void deleteDeposit(Long depositsId) {
 

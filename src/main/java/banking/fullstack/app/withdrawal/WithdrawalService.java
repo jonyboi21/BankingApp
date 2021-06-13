@@ -26,19 +26,19 @@ public class WithdrawalService {
         return withdrawalRepository.getWithdrawalByAccountId(accountId);
     }
 
-    public Withdrawal createWithdrawal(Withdrawal withdrawal, Long accountId) {
-
-        withdrawalLog.info("===== CREATING WITHDRAWAL =====");
-        Optional<Account> account = accountService.getAccountByAccountId(accountId);
-
-        Double accountBalance = account.get().getBalance();
-        Double withdrawalAmount = withdrawal.getAmount();
-
-        Double transaction = accountBalance - withdrawalAmount;
-        account.get().setBalance(transaction);
-
-        return withdrawalRepository.save(withdrawal);
-    }
+//    public Withdrawal createWithdrawal(Withdrawal withdrawal, Long accountId) {
+//
+//        withdrawalLog.info("===== CREATING WITHDRAWAL =====");
+//        Optional<Account> account = accountService.getAccountByAccountId(accountId);
+//
+//        Double accountBalance = account.get().getBalance();
+//        Double withdrawalAmount = withdrawal.getAmount();
+//
+//        Double transaction = accountBalance - withdrawalAmount;
+//        account.get().setBalance(transaction);
+//
+//        return withdrawalRepository.save(withdrawal);
+//    }
 
     public Optional<Withdrawal> getWithdrawalByWithdrawalId(Long withdrawalId) {
 
@@ -46,26 +46,26 @@ public class WithdrawalService {
         return withdrawalRepository.findById(withdrawalId);
     }
 
-    public void updateWithdrawal(Withdrawal withdrawal, Long withdrawalId) {
-
-        withdrawalLog.info("===== UPDATING WITHDRAWAL =====");
-
-        Account account = accountService.getAccountByAccountId(withdrawal.getPayer_id()).orElse(null);
-
-        Double oldWithdrawalAmount = withdrawalRepository.findById(withdrawalId).get().getAmount();
-
-        Double accountBalance = account.getBalance();
-
-        Double oldBalance = accountBalance + oldWithdrawalAmount;
-        account.setBalance(oldBalance);
-
-        Double depositAmount = withdrawal.getAmount();
-
-        Double transaction = oldBalance - depositAmount;
-        account.setBalance(transaction);
-
-        withdrawalRepository.save(withdrawal);
-    }
+//    public void updateWithdrawal(Withdrawal withdrawal, Long withdrawalId) {
+//
+//        withdrawalLog.info("===== UPDATING WITHDRAWAL =====");
+//
+//        Account account = accountService.getAccountByAccountId(withdrawal.getPayer_id()).orElse(null);
+//
+//        Double oldWithdrawalAmount = withdrawalRepository.findById(withdrawalId).get().getAmount();
+//
+//        Double accountBalance = account.getBalance();
+//
+//        Double oldBalance = accountBalance + oldWithdrawalAmount;
+//        account.setBalance(oldBalance);
+//
+//        Double depositAmount = withdrawal.getAmount();
+//
+//        Double transaction = oldBalance - depositAmount;
+//        account.setBalance(transaction);
+//
+//        withdrawalRepository.save(withdrawal);
+//    }
 
     public void deleteWithdrawal(Long withdrawalId) {
 
@@ -87,12 +87,12 @@ public class WithdrawalService {
     }
 
 
-    public boolean checkWithdrawPossible(Long accountId, Withdrawal withdrawal){
-    if (accountService.getAccountByAccountId(accountId).get().getBalance() <= withdrawal.getAmount()){
-        return false;
-    }
-        return true;
-    }
+//    public boolean checkWithdrawPossible(Long accountId, Withdrawal withdrawal){
+//    if (accountService.getAccountByAccountId(accountId).get().getBalance() <= withdrawal.getAmount()){
+//        return false;
+//    }
+//        return true;
+//    }
 
 
 

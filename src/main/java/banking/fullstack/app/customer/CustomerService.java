@@ -4,6 +4,9 @@ package banking.fullstack.app.customer;
 import banking.fullstack.app.customer.Customer;
 import banking.fullstack.app.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,7 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomerService {
+public class CustomerService implements UserDetailsService {
+    private final static String USER_NOT_FOUND_MSG =
+            "user with email %s not found";
+
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -49,14 +55,17 @@ public class CustomerService {
     }
 
 
-//    @Override
-//    public UserDetails loadUserByUsername(String email)
-//            throws UsernameNotFoundException {
-//        return customerRepository.findByEmail(email)
-//                .orElseThrow();
-//    }
-
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id).get();
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return customerRepository.findByEmail(username)
+                .orElseThrow(() ->
+                new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG,username)));
+    }
+
+
+
 }
