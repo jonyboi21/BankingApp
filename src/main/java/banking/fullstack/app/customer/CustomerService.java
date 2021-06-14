@@ -2,7 +2,6 @@ package banking.fullstack.app.customer;
 
 //import com.example.bankingapi.account.AccountService;
 import banking.fullstack.app.customer.Customer;
-import banking.fullstack.app.customer.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +11,6 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-    private final static String USER_NOT_FOUND_MSG =
-            "user with email %s not found";
-
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -26,7 +22,7 @@ public class CustomerService {
         if(userExists){
             throw new IllegalStateException("email already taken");
         }else
-        customerRepository.save(customer);
+            customerRepository.save(customer);
     }
     public List<Customer> getAllCustomers(){
         List<Customer> listOfCustomers = new ArrayList<Customer>();
@@ -37,11 +33,11 @@ public class CustomerService {
     }
 
     private Optional<Customer> getCustomerByEmail(Long id){
-      return  customerRepository.findById(id);
+        return  customerRepository.findById(id);
     }
 
     public void updateCustomer(Customer customer, Long id){
-       Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
         customer.setId(id);
         customerRepository.save(customer);
 
@@ -52,11 +48,14 @@ public class CustomerService {
     }
 
 
+//    @Override
+//    public UserDetails loadUserByUsername(String email)
+//            throws UsernameNotFoundException {
+//        return customerRepository.findByEmail(email)
+//                .orElseThrow();
+//    }
+
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id).get();
     }
-
-
-
-
 }

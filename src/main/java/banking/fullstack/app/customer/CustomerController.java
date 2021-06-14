@@ -1,88 +1,43 @@
 package banking.fullstack.app.customer;
-
-import banking.fullstack.app.exceptionhandling.CodeMessage;
-import banking.fullstack.app.exceptionhandling.CodeMessageData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+
 @RestController
-@RequestMapping(path = "/hanover/api/v2")
+@RequestMapping(path = "/api/v1")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping("/customers")
-    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
-        try {
-            CodeMessageData response = new CodeMessageData(201, "Customer created", customerService.createCustomer(customer));
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (Exception e){
-            CodeMessage error = new CodeMessage(404, "Error: could not create customer");
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        }
+    @PostMapping("/customer")
+    public void createCustomer(@RequestBody Customer customer) {
+        customerService.createCustomer(customer);
     }
 
-    @GetMapping("/customers")
-    public ResponseEntity<?> getAllCustomers() {
-        List<Customer> customers = customerService.getAllCustomers();
-        if(customers.isEmpty()){
-            CodeMessage error = new CodeMessage(404, "Error: no customers found");
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        }
-
-        CodeMessageData response = new CodeMessageData(200, "Success", customers);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @GetMapping("/customer/")
+    public List<Customer> getAllCustomers(){
+        return customerService.getAllCustomers();
     }
 
-    @GetMapping("/accounts/{account_id}/customer")
-    public ResponseEntity<?> getCustomerByAccount(@PathVariable Long account_id){
-        Customer customer = customerService.getCustomerByAccountId(account_id).orElse(null);
-        if(customer == null){
-            CodeMessage error = new CodeMessage(404, "Error: customer with account id " + account_id + " does not exist");
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        }
-
-        CodeMessageData response = new CodeMessageData(200, "Success", customer);
-        return new ResponseEntity<> (response, HttpStatus.OK);
+    @GetMapping("/customer/{id}")
+    public Customer getCustomerById(@PathVariable Long id){
+        return customerService.getCustomerById(id);
     }
 
-    @GetMapping("/customers/{id}")
-    public ResponseEntity<?> getCustomerById(@PathVariable Long id){
-        Customer customer = customerService.getCustomerById(id).orElse(null);
-        if(customer == null){
-            CodeMessage error = new CodeMessage(404, "Error: customer with id " + id + " does not exist");
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        }
-
-        CodeMessageData response = new CodeMessageData(200, "Success", customer);
-        return new ResponseEntity<> (response, HttpStatus.OK);
-    }
-
-    @PutMapping("/customers/{id}")
-    public ResponseEntity<?> updateCustomer(@RequestBody Customer customer, @PathVariable Long id){
-        if(!customerService.customerCheck(id)){
-            CodeMessage exception = new CodeMessage(404,"Error: customer with id " + id + " does not exist");
-            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
-        }
-
-        customerService.updateCustomer(customer, id);
-        CodeMessage response = new CodeMessage(200, "Customer updated");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
     @DeleteMapping("/customer/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable Long id){
-        if(!customerService.customerCheck(id)){
-            CodeMessage exception = new CodeMessage(404,"Error: customer with id " + id + " does not exist");
-            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
-        }
+    public void deleteCustomer(@PathVariable Long id){
         customerService.deleteCustomer(id);
-        CodeMessage response = new CodeMessage(200,"Customer deleted");
-        return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+
+    @PutMapping("/customer/{id}")
+    public void updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
+        customerService.updateCustomer(customer,id);
+    }
+
+
 }
 
