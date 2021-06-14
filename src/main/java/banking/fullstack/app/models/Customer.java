@@ -1,7 +1,10 @@
 package banking.fullstack.app.models;
 
 
+import banking.fullstack.app.enums.CustomerRole;
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,7 +16,7 @@ import javax.validation.constraints.NotNull;
 
 
 @Entity
-public class Customer {
+public class Customer  {
 
 
     @Id
@@ -31,7 +34,6 @@ public class Customer {
     @NotEmpty
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Address> addressSet;
-
 
 
     public Customer() {
@@ -63,10 +65,6 @@ public class Customer {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public Set<Address> getAddressSet() {
