@@ -18,6 +18,9 @@ public class BillService {
     @Autowired
     private BillRepository billRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     public Iterable<Bill> getAllBills(){
         return billRepository.findAll();
     }
@@ -45,6 +48,12 @@ public class BillService {
 
     public void deleteBill(Long id){
         billRepository.deleteById(id);
+    }
+
+    public boolean billCheck(Long billId){
+
+        Bill bill = billRepository.findById(billId).orElse(null);
+        return bill != null;
     }
 }
 
