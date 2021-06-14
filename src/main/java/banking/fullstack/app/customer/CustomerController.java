@@ -69,7 +69,7 @@ public class CustomerController {
             return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
         }
 
-        customerService.updateCustomer(customer);
+        customerService.updateCustomer(customer, id);
         CodeMessage response = new CodeMessage(200, "Customer updated");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
