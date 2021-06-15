@@ -89,15 +89,20 @@ public class DepositController {
     }
 
     @PutMapping("/deposits/{depositsId}")
-    public ResponseEntity<?> updateDeposit(@PathVariable Long depositsId, @RequestBody Deposit deposit){
+    public ResponseEntity<?> updateDeposit(@PathVariable Long depositsId, @RequestBody Deposit deposit) {
 
-        if(!depositService.depositCheck(depositsId)){
-            CodeMessage exception = new CodeMessage(404, "Error: deposit with id " + depositsId + " does not exist");
-            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        try {
+            if (!depositService.depositCheck(depositsId)) {
+                CodeMessage exception = new CodeMessage(404, "Error: deposit with id " + depositsId + " does not exist");
+                return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+            }
+            depositService.updateDeposit(deposit, depositsId);
+            CodeMessage response = new CodeMessage(200, "Deposit updated");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            CodeMessage error = new CodeMessage(404, "Error: could not update deposit");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
-        depositService.updateDeposit(deposit, depositsId);
-        CodeMessage response = new CodeMessage(200, "Deposit updated");
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/deposits/{depositsId}")

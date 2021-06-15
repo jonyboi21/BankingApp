@@ -33,7 +33,7 @@ public class AccountController {
                 CodeMessageData response = new CodeMessageData(201, "Account created", accountService.createAccount(account));
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             }
-            CodeMessage exception = new CodeMessage(404, "Error: customer not found");
+            CodeMessage exception = new CodeMessage(404, "Error: customer with id " + customerId + " does not exist");
             return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             CodeMessage error = new CodeMessage(400, "Error: could not create account");
@@ -41,7 +41,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/account/")
+    @GetMapping("/account")
     public ResponseEntity<?> getAllAccounts() {
 
         Iterable<Account> accounts = accountService.getAllAccounts();

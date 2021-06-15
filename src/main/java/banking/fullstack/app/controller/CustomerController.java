@@ -29,7 +29,7 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/customer/")
+    @GetMapping("/customer")
     public ResponseEntity<?> getAllCustomers(){
         List<Customer> customers = customerService.getAllCustomers();
         if(customers.isEmpty()){
