@@ -26,7 +26,7 @@ public class AccountController {
     @PostMapping("customer/{customerId}/account")
     public ResponseEntity<?> createAccount(@PathVariable Long customerId, @RequestBody Account account) {
         if (customerRepository.existsById(customerId)) {
-            accountService.createAccount(account,customerId);
+            accountService.createAccount(account);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -55,7 +55,7 @@ public class AccountController {
 
     @PutMapping("/account/{accountId}")
     public void updateAccount(@PathVariable Long accountId, @RequestBody Account account) {
-            accountService.updateAccount(account, accountId);
+            accountService.updateAccount(account);
     }
 
         @DeleteMapping("/account/{accountId}")

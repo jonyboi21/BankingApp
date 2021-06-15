@@ -16,14 +16,14 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
 
-    public void createCustomer(Customer customer){
+    public Customer createCustomer(Customer customer){
         Boolean userExists = customerRepository
                 .findByEmail(customer.getEmail())
                 .isPresent();
         if(userExists){
             throw new IllegalStateException("email already taken");
         }else
-            customerRepository.save(customer);
+            return customerRepository.save(customer);
     }
     public List<Customer> getAllCustomers(){
         List<Customer> listOfCustomers = new ArrayList<Customer>();
@@ -48,15 +48,13 @@ public class CustomerService {
         customerRepository.deleteById(customerId);
     }
 
+    public Optional<Customer> getCustomerById(Long id) {
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        return optionalCustomer;
+    }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String email)
-//            throws UsernameNotFoundException {
-//        return customerRepository.findByEmail(email)
-//                .orElseThrow();
-//    }
-
-    public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id).get();
+    public boolean customerCheck(Long customerId){
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        return customer != null;
     }
 }
