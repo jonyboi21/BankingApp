@@ -1,7 +1,5 @@
 package banking.fullstack.app.models;
 
-import banking.fullstack.app.enums.AccountType;
-
 import javax.persistence.*;
 
 @Entity
@@ -11,15 +9,11 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    AccountType type;
-    private String nickname;
-    @Column(nullable = false)
-    private Integer rewards;
-    @Column(nullable = false)
     private Double balance;
     @Column(nullable = false)
     private Long customerId;
+    @Column
+    private double accountId = Math.floor(100000 + Math.random() * 900000);
 
     public Long getId() {
         return id;
@@ -27,30 +21,6 @@ public class Account {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public AccountType getType() {
-        return type;
-    }
-
-    public void setType(AccountType type) {
-        this.type = type;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public Integer getRewards() {
-        return rewards;
-    }
-
-    public void setRewards(Integer rewards) {
-        this.rewards = rewards;
     }
 
     public Double getBalance() {
@@ -67,5 +37,13 @@ public class Account {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public Double getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 }
