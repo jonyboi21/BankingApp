@@ -26,7 +26,7 @@ public class AccountController {
     @PostMapping("customer/{customerId}/account")
     public ResponseEntity<?> createAccount(@PathVariable Long customerId, @RequestBody Account account) {
         if (customerRepository.existsById(customerId)) {
-            accountService.createAccount(account);
+            accountService.createAccount(account,customerId);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

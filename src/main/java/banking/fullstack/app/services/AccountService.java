@@ -18,7 +18,8 @@ public class AccountService {
     @Autowired
     CustomerRepository customerRepository;
 
-    public Account createAccount(Account account){
+    public Account createAccount(Account account, Long customerId){
+        account.setCustomerId(customerId);
         return accountRepository.save(account);
     }
 
@@ -47,6 +48,7 @@ public class AccountService {
     }
 
     public void updateAccount(Account account, Long accountId){
+        account.setId(accountId);
         accountRepository.save(account);
     }
 

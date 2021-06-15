@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class BillService {
 
 //    @Autowired
@@ -42,7 +41,7 @@ public class BillService {
 //    public void updateBill(Bill bill){
 //        billRepository.save(bill);
 //    }
-//
+//`
 //    public void deleteBill(Long id){
 //        billRepository.deleteById(id);
 //    }
