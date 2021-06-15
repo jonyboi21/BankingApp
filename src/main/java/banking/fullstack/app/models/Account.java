@@ -1,5 +1,7 @@
 package banking.fullstack.app.models;
 
+import banking.fullstack.app.enums.AccountType;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,10 @@ public class Account {
     private Double balance;
     @Column(nullable = false)
     private Long customerId;
+    @Column(nullable = false)
+    private String nickname;
+    @Enumerated(EnumType.STRING)
+    AccountType type;
     @Column
     private double accountId = Math.floor(100000 + Math.random() * 900000);
 
@@ -39,11 +45,27 @@ public class Account {
         this.customerId = customerId;
     }
 
-    public Double getAccountId() {
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public AccountType getType() {
+        return type;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
+    }
+
+    public double getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
+    public void setAccountId(double accountId) {
         this.accountId = accountId;
     }
 }
