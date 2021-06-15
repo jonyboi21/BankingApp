@@ -18,8 +18,7 @@ public class CustomerService {
 
     public void createCustomer(Customer customer){
         Boolean userExists = customerRepository
-                .findByEmail(customer.getEmail())
-                .isPresent();
+                .findByEmail(customer.getEmail()) == null;
         if(userExists){
             throw new IllegalStateException("email already taken");
         }else
@@ -59,4 +58,6 @@ public class CustomerService {
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id).get();
     }
+
+
 }
