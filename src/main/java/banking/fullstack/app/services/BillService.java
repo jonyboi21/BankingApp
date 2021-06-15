@@ -15,36 +15,37 @@ import java.util.List;
 @Service
 public class BillService {
 
-    @Autowired
-    private BillRepository billRepository;
+//    @Autowired
+//    private BillRepository billRepository;
+//
+//    public Iterable<Bill> getAllBills(){
+//        return billRepository.findAll();
+//    }
+//
+//    public List<Bill> getBillsByAccountId(Long id) {
+//        return billRepository.getBillByAccountId(id);
+//    }
+//
+//    public Bill getBillByBillId(Long id) {
+//        return billRepository.findById(id).orElse(null);
+//    }
+//
+//    public List<Bill> getAllBillsByCustomerId(Long customer_id) {
+//        List<Long> accountId = billRepository.getAccountIdThatMatchesCustomerId(customer_id);
+//        return billRepository.getBillsByCustomerId(accountId);
+//    }
+//
+//    public Bill createBill(Bill bill) {
+//        return billRepository.save(bill);
+//    }
+//
+//    public void updateBill(Bill bill){
+//        billRepository.save(bill);
+//    }
+//
+//    public void deleteBill(Long id){
+//        billRepository.deleteById(id);
+//    }
 
-    public Iterable<Bill> getAllBills(){
-        return billRepository.findAll();
-    }
-
-    public List<Bill> getBillsByAccountId(Long id) {
-        return billRepository.getBillByAccountId(id);
-    }
-
-    public Bill getBillByBillId(Long id) {
-        return billRepository.findById(id).orElse(null);
-    }
-
-    public List<Bill> getAllBillsByCustomerId(Long customer_id) {
-        List<Long> accountId = billRepository.getAccountIdThatMatchesCustomerId(customer_id);
-        return billRepository.getBillsByCustomerId(accountId);
-    }
-
-    public Bill createBill(Bill bill) {
-        return billRepository.save(bill);
-    }
-
-    public void updateBill(Bill bill){
-        billRepository.save(bill);
-    }
-
-    public void deleteBill(Long id){
-        billRepository.deleteById(id);
-    }
 }
 

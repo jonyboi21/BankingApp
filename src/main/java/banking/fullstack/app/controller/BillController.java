@@ -13,56 +13,56 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/hanover/api/v2")
 public class BillController {
-    @Autowired
-    private BillService billService;
-
-    @Autowired
-    private BillRepository billRepository;
-
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @GetMapping("/bills")
-    public void getAllBills() {
-       billService.getAllBills();
-    }
-
-    @GetMapping("/accounts/{accountId}/bills")
-    public void getAllBillsByAccount(@PathVariable Long accountId) {
-        billService.getBillsByAccountId(accountId);
-    }
-
-    @GetMapping("/bills/{billId}")
-    public void getBillById(@PathVariable Long billId){
-        billService.getBillByBillId(billId);
-    }
-
-    @GetMapping("/customers/{customerId}/bills")
-    public void getAllBillsByCustomerId(@PathVariable Long customerId){
-        billService.getAllBillsByCustomerId(customerId);
-    }
-
-    @PostMapping("/accounts/{accountId}/bills")
-    public void createBill(@RequestBody Bill bill) {
-      billService.createBill(bill);
-    }
-
-    @PutMapping("/bills/{billId}")
-    public void updateBill(@RequestBody Bill bill){
-        billService.updateBill(bill);
-    }
-
-    @DeleteMapping("/bills/{billId}")
-    public void deleteBill(@PathVariable Long billId){
-        billService.deleteBill(billId);
-    }
+//    @Autowired
+//    private BillService billService;
+//
+//    @Autowired
+//    private BillRepository billRepository;
+//
+//    @Autowired
+//    private CustomerService customerService;
+//
+//    @Autowired
+//    private CustomerRepository customerRepository;
+//
+//    @Autowired
+//    private AccountService accountService;
+//
+//    @Autowired
+//    private AccountRepository accountRepository;
+//
+//    @GetMapping("/bills")
+//    public void getAllBills() {
+//       billService.getAllBills();
+//    }
+//
+//    @GetMapping("/accounts/{accountId}/bills")
+//    public void getAllBillsByAccount(@PathVariable Long accountId) {
+//        billService.getBillsByAccountId(accountId);
+//    }
+//
+//    @GetMapping("/bills/{billId}")
+//    public void getBillById(@PathVariable Long billId){
+//        billService.getBillByBillId(billId);
+//    }
+//
+//    @GetMapping("/customers/{customerId}/bills")
+//    public void getAllBillsByCustomerId(@PathVariable Long customerId){
+//        billService.getAllBillsByCustomerId(customerId);
+//    }
+//
+//    @PostMapping("/accounts/{accountId}/bills")
+//    public void createBill(@RequestBody Bill bill) {
+//      billService.createBill(bill);
+//    }
+//
+//    @PutMapping("/bills/{billId}")
+//    public void updateBill(@RequestBody Bill bill){
+//        billService.updateBill(bill);
+//    }
+//
+//    @DeleteMapping("/bills/{billId}")
+//    public void deleteBill(@PathVariable Long billId){
+//        billService.deleteBill(billId);
+//    }
 }
