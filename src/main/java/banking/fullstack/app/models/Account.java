@@ -14,6 +14,8 @@ public class Account {
     private Double balance;
     @Column(nullable = false)
     private Long customerId;
+    @Column(nullable = false)
+    private String nickname;
     @Enumerated(EnumType.STRING)
     AccountType type;
     @Column
@@ -43,6 +45,14 @@ public class Account {
         this.customerId = customerId;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public AccountType getType() {
         return type;
     }
@@ -58,5 +68,4 @@ public class Account {
     public void setAccountId(double accountId) {
         this.accountId = accountId;
     }
-
 }
