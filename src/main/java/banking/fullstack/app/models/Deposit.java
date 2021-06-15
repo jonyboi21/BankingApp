@@ -17,8 +17,6 @@ public class Deposit {
     @Column(nullable = false)
     private Long payeeId;
     @Column(nullable = false)
-    private String medium;
-    @Column(nullable = false)
     private Double amount;
     @Column(nullable = false)
     private String description;
@@ -61,14 +59,6 @@ public class Deposit {
 
     public void setPayeeId(Long payeeId) {
         this.payeeId = payeeId;
-    }
-
-    public String getMedium() {
-        return medium;
-    }
-
-    public void setMedium(String medium) {
-        this.medium = medium;
     }
 
     public Double getAmount() {
