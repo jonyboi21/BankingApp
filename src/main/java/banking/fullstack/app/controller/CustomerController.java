@@ -40,10 +40,6 @@ public class CustomerController {
         customerService.updateCustomer(customer,id);
     }
 
-    @GetMapping("/customer/login/{email}/{password}")
-    public Customer loginCustomer(@PathVariable String email, @PathVariable String password){
-       return customerService.login(email,password);
-    }
 
 }
 
