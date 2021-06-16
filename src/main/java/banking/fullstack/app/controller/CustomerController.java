@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(path = "/api/v1")
 public class CustomerController {
@@ -30,14 +30,12 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public ResponseEntity<?> getAllCustomers(){
+    public Iterable<Customer> getAllCustomers(){
         List<Customer> customers = customerService.getAllCustomers();
         if(customers.isEmpty()){
-            CodeMessage error = new CodeMessage(404, "Error: no customers found");
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            return null;
         }
-        CodeMessageData response = new CodeMessageData(200, "Success", customers);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return customers;
     }
 
     @GetMapping("/customer/{id}")

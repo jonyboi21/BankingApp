@@ -43,15 +43,14 @@ public class AccountController {
     }
 
     @GetMapping("/account")
-    public ResponseEntity<?> getAllAccounts() {
+    public Iterable<Account> getAllAccounts() {
 
         Iterable<Account> accounts = accountService.getAllAccounts();
         if (accounts.iterator().hasNext()) {
-            CodeMessageData response = new CodeMessageData(200, "Success", accounts);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return accounts;
         }
-        CodeMessage exception = new CodeMessage(404, "Error: no accounts found");
-        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+
+        return null;
     }
 
     @GetMapping("/account/{accountId}")
