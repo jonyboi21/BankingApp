@@ -89,14 +89,19 @@ public class WithdrawalController {
 
     @PutMapping("/withdrawals/{withdrawalId}")
     public ResponseEntity<?> updateWithdrawal(@PathVariable Long withdrawalId, @RequestBody Withdrawal withdrawal) {
-        if (!withdrawalService.withdrawalCheck(withdrawalId)) {
-            CodeMessage exception = new CodeMessage(404,"Error: withdrawal with id " + withdrawalId + " does not exist");
-            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
-        }
+        try {
+            if (!withdrawalService.withdrawalCheck(withdrawalId)) {
+                CodeMessage exception = new CodeMessage(404, "Error: withdrawal with id " + withdrawalId + " does not exist");
+                return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+            }
 
-        withdrawalService.updateWithdrawal(withdrawal, withdrawalId);
-        CodeMessage response = new CodeMessage(200, "Withdrawal updated");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            withdrawalService.updateWithdrawal(withdrawal, withdrawalId);
+            CodeMessage response = new CodeMessage(200, "Withdrawal updated");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            CodeMessage error = new CodeMessage(404, "Error: could not update withdrawal");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/withdrawals/{withdrawalId}")
@@ -106,9 +111,8 @@ public class WithdrawalController {
         CodeMessage exception = new CodeMessage(404,"Error: withdrawal with id " + withdrawalId + " does not exist");
         return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
-
         withdrawalService.deleteWithdrawal(withdrawalId);
         CodeMessage response = new CodeMessage(200, "Withdrawal deleted");
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

@@ -1,5 +1,7 @@
 package banking.fullstack.app.controller;
 
+import banking.fullstack.app.exceptionhandling.CodeMessage;
+import banking.fullstack.app.exceptionhandling.CodeMessageData;
 import banking.fullstack.app.models.Account;
 import banking.fullstack.app.repositories.AccountRepository;
 import banking.fullstack.app.repositories.CustomerRepository;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(path = "/api/v1")
 public class AccountController {
@@ -25,42 +28,81 @@ public class AccountController {
 
     @PostMapping("customer/{customerId}/account")
     public ResponseEntity<?> createAccount(@PathVariable Long customerId, @RequestBody Account account) {
-        if (customerRepository.existsById(customerId)) {
-            accountService.createAccount(account);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        try {
+            if (accountService.customerCheck(customerId)) {
+                CodeMessageData response = new CodeMessageData(201, "Account created", accountService.createAccount(account));
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
+            }
+            CodeMessage exception = new CodeMessage(404, "Error: customer with id " + customerId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            CodeMessage error = new CodeMessage(400, "Error: could not create account");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping("/account/")
+    @GetMapping("/account")
     public Iterable<Account> getAllAccounts() {
-        return accountService.getAllAccounts();
+
+        Iterable<Account> accounts = accountService.getAllAccounts();
+        if (accounts.iterator().hasNext()) {
+            return accounts;
+        }
+
+        return null;
     }
 
     @GetMapping("/account/{accountId}")
-    public Optional<Account> getAccountByAccountId(@PathVariable Long accountId) {
-        return accountService.getAccountByAccountId(accountId);
+    public ResponseEntity<?> getAccountByAccountId(@PathVariable Long accountId) {
+
+        Optional<Account> account = accountService.getAccountByAccountId(accountId);
+        if (account.isEmpty()) {
+            CodeMessage exception = new CodeMessage(404, "Error: account with id " + accountId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        }
+        CodeMessageData response = new CodeMessageData(200, "Success", account);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/customers/{customerId}/accounts")
-    public Iterable<Account> getAllAccountsByCustomer(@PathVariable Long customerId) {
+    public ResponseEntity<?> getAllAccountsByCustomer(@PathVariable Long customerId) {
+
+        Iterable<Account> accounts = accountService.getAllAccountsByCustomer(customerId);
         if (customerRepository.existsById(customerId)) {
-            return accountService.getAllAccountsByCustomer(customerId);
+            CodeMessageData response = new CodeMessageData(200, "Success", accounts);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return null;
+            CodeMessage exception = new CodeMessage(404, "Error: customer with id " + customerId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
         }
     }
-    //need to make the customer id match an existing customer id
 
     @PutMapping("/account/{accountId}")
-    public void updateAccount(@PathVariable Long accountId, @RequestBody Account account) {
-            accountService.updateAccount(account, accountId);
+    public ResponseEntity<?> updateAccount(@PathVariable Long accountId, @RequestBody Account account) {
+
+        try {
+            if (accountService.accountCheck(accountId)) {
+                accountService.updateAccount(account, accountId);
+                CodeMessage response = new CodeMessage(200, "Customer account updated");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            CodeMessage exception = new CodeMessage(404, "Error: account with id " + accountId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            CodeMessage error = new CodeMessage(400, "Error: could not update account");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
     }
 
         @DeleteMapping("/account/{accountId}")
-        public void deleteAccount (@PathVariable Long accountId){
-            accountService.deleteAccount(accountId);
-
-    }
+        public ResponseEntity<?> deleteAccount (@PathVariable Long accountId){
+            if (accountService.accountCheck(accountId)) {
+                accountService.deleteAccount(accountId);
+                CodeMessage response = new CodeMessage(200, "Account deleted");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            CodeMessage exception = new CodeMessage(404, "Error: account with id " + accountId + " does not exist");
+            return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        }
 }
